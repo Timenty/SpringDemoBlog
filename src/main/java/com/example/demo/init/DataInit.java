@@ -7,14 +7,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 @Component
 public class DataInit implements ApplicationRunner {
     private BlogPostDAO blogPostDAO;
-
-    private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     public DataInit(BlogPostDAO blogPostDAO) {
@@ -22,6 +17,24 @@ public class DataInit implements ApplicationRunner {
     }
 
     @Override
-    public void run(ApplicationArguments)
+    public void run(ApplicationArguments args) throws Exception {
+        long count = blogPostDAO.count();
+ 
+        if (count == 0) {
+            BlogPost p1 = new BlogPost();
+            p1.setTitle("Первый пост");
+            p1.setSubtitle("Совершенно обычный пост");
+            p1.setText("Какой то текст.... бла бла");
 
+            BlogPost p2 = new BlogPost();
+            p2.setTitle("Второй пост");
+            p2.setSubtitle("Не очень обычный пост");
+            p2.setText("Lorem ipsum...");
+ 
+            blogPostDAO.save(p1);
+            blogPostDAO.save(p2);
+        }
+ 
+    }
+     
 }
